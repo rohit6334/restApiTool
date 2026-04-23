@@ -20,6 +20,24 @@ function sendJson(res, statusCode, payload) {
   res.end(JSON.stringify(payload, null, 2));
 }
 
+function normalizePathname(pathname) {
+  if (!pathname || pathname === "/") {
+    return "/";
+  }
+
+  return pathname.replace(/\/+$/, "") || "/";
+}
+
+function matchesEndpoint(pathname, endpoint) {
+  const normalizedPathname = normalizePathname(pathname);
+
+  if (normalizedPathname === endpoint) {
+    return true;
+  }
+
+  return normalizedPathname.endsWith(endpoint) && normalizedPathname.at(-(endpoint.length + 1)) === "/";
+}
+
 function isMethodWithBody(method) {
   return ["POST", "PUT", "PATCH", "DELETE"].includes(method.toUpperCase());
 }
@@ -134,12 +152,12 @@ async function serveFile(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   const reqUrl = new URL(req.url ?? "/", `http://${req.headers.host}`);
 
-  if (req.method === "GET" && reqUrl.pathname === "/health") {
+  if (req.method === "GET" && matchesEndpoint(reqUrl.pathname, "/health")) {
     sendJson(res, 200, { status: "ok" });
     return;
   }
 
-  if (req.method === "POST" && reqUrl.pathname === "/proxy") {
+  if (req.method === "POST" && matchesEndpoint(reqUrl.pathname, "/proxy")) {
     await handleProxy(req, res);
     return;
   }
