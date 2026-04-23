@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local REST API Tester</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>Local REST API Tester</h1>
+        <p class="subtitle">Send local or remote REST requests quickly.</p>
+      </header>
+
+      <section class="panel">
+        <label for="url">Request URL</label>
+        <input id="url" type="text" placeholder="http://127.0.0.1:8000/api/health" />
+
+        <div class="row">
+          <div class="field">
+            <label for="method">Method</label>
+            <select id="method">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>PATCH</option>
+              <option>DELETE</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="headers">Headers (JSON object)</label>
+            <textarea id="headers" rows="5" spellcheck="false">
+{
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+}</textarea
+            >
+          </div>
+        </div>
+
+        <label for="body">Body (raw)</label>
+        <textarea id="body" rows="8" spellcheck="false" placeholder='{"name":"Test"}'></textarea>
+
+        <div class="actions">
+          <button id="send" type="button">Send Request</button>
+          <button id="clear" class="secondary" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Response</h2>
+        <div class="meta" id="meta">No request sent yet.</div>
+        <pre id="response"></pre>
+      </section>
+    </main>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
